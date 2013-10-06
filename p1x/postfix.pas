@@ -22,6 +22,7 @@ type	Uk = ^Uzel;
 		Znak:char;
 		L,P:Uk;
 	end;
+var povoleno,cislo:set of char;
 
 {pruchod stromem s korenem K metodou postorder}
 {vypsani aritmetickeho vyrazu v postfixove notaci}
@@ -46,16 +47,18 @@ function Prvek(var Hodnota:integer; var Znak:char):boolean;
 var	Z:char;
 	H:integer;
 begin
-	repeat read(z) until Z<>' ';
+	repeat read(z) until (Z in povoleno);
 	if ord(Z)=10 then Prvek:=false else begin
 		Prvek:=true;
 		if(Z>='0')and(Z<='9') then begin
 			Znak:='$';{na vstupu je cislo}
 			H:=0;
 			repeat
-				h:=H*10+ord(Z)-ord('0');
-				read(Z)
-			until (Z = ' ') or eof;
+				if(Z>='0')and(Z<='9') then begin
+					h:=H*10+ord(Z)-ord('0');
+					read(Z);
+				end
+			until (not (Z in cislo) or eof);
 			Hodnota:=H
 		end else Znak:=Z
 	end
@@ -98,5 +101,7 @@ begin
 end;
 
 begin
+cislo:=['0','1','2','3','4','5','6','7','8','9'];
+povoleno:=cislo+['+','-','*','/', chr(10)];
 writeln(PostfixVyhodnoceni);
 end.
