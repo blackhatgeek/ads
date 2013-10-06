@@ -47,9 +47,7 @@ var	Z:char;
 	H:integer;
 begin
 	repeat read(z) until Z<>' ';
-	writeln('-> Z=',Z,',',ord(Z));
 	if ord(Z)=10 then Prvek:=false else begin
-		writeln('->TRUE');
 		Prvek:=true;
 		if(Z>='0')and(Z<='9') then begin
 			Znak:='$';{na vstupu je cislo}
@@ -75,38 +73,28 @@ var	Zas: array [1..Max] of integer; {pracovni zasobnik}
 begin
 	V:=0;
 	Pokracovat:=Prvek(H,Z);
-	
-	writeln('Hodnota: ',H);
-	writeln('Znak: ',Z);
-	writeln('Pokracovat: ',Pokracovat);
-
 	while Pokracovat do begin
 		if Z='$' then begin {na vstupu cislo}
 			V:=V+1; Zas[V]:=H; {operand dame do zasobniku}
-			writeln('Zas[',V,']=',H);
 			Pokracovat:=Prvek(H,Z);
 		end
 		else if V < 2 then begin
-			writeln(CHYBA,': PostfixVyhodnoceni:82');
+			writeln(CHYBA);
 			Pokracovat:=false;
 		end else begin {na vstupu znamenko}
 			H2:=Zas[V]; V:=V-1; {pravy operand ze zasobniku}
 			H1:=Zas[V]; {levy operand ze zasobniku}
 			case Z of
-				'+': begin writeln(H1,'+',H2); H:=H1+H2; end;
-				'-': begin writeln(H1,'-',H2);H:=H1-H2; end;
-				'*': begin writeln(H1,'*',H2);H:=H1*H2; end;
-				'/': begin writeln(H1,'/',H2);H:=H1 div H2; end;
+				'+': H:=H1+H2;
+				'-': H:=H1-H2;
+				'*': H:=H1*H2;
+				'/': H:=H1 div H2;
 			end;
 			Zas[V]:=H;{vysledek dame do zasobniku}
-			writeln('Zas[',V,']=',H);
 			Pokracovat:=Prvek(H,Z);
-			writeln('Hodnota: ',H);
-			writeln('Znak: ',Z);
-			writeln('Pokracovat: ',Pokracovat)
 		end;
 	end;
-	if V>1 then writeln(CHYBA,': PostfixVyhodnoceni:97') else PostfixVyhodnoceni:=Zas[1];
+	if V>1 then writeln(CHYBA) else PostfixVyhodnoceni:=Zas[1];
 end;
 
 begin
