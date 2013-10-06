@@ -22,9 +22,10 @@ type	Uk = ^Uzel;
 		Znak:char;
 		L,P:Uk;
 	end;
-var povoleno,cislo:set of char;
-var vysl:integer;
-var ok2:boolean;
+var	povoleno,cislo:set of char;
+	vysl:integer;
+	ok2,empty:boolean;
+	dalsi:char;
 
 {pruchod stromem s korenem K metodou postorder}
 {vypsani aritmetickeho vyrazu v postfixove notaci}
@@ -49,8 +50,12 @@ function Prvek(var Hodnota:integer; var Znak:char):boolean;
 var	Z:char;
 	H:integer;
 begin
-	repeat read(z) until ((Z in povoleno) or eof(input));
-	if ord(Z)=10 then Prvek:=false else begin
+	if empty then repeat read(z) until ((Z in povoleno) or eof(input))
+	else begin
+		z:=dalsi;
+		empty:=true;
+	end;
+	if eof(input) then Prvek:=false else begin
 		Prvek:=true;
 		if(Z>='0')and(Z<='9') then begin
 			Znak:='$';{na vstupu je cislo}
@@ -61,6 +66,10 @@ begin
 					read(Z);
 				end
 			until (not (Z in cislo) or eof);
+			if(z in povoleno) then begin
+				dalsi:=z;
+				empty:=false
+			end;
 			Hodnota:=H
 		end else Znak:=Z
 	end
@@ -76,6 +85,7 @@ var	Zas: array [1..Max] of integer; {pracovni zasobnik}
 	Z:char;{znamenko na vstupu}
 	Pokracovat:boolean;
 begin
+	ok:=true;
 	V:=0;
 	Pokracovat:=Prvek(H,Z);
 	while Pokracovat do begin
@@ -83,7 +93,8 @@ begin
 			V:=V+1; Zas[V]:=H; {operand dame do zasobniku}
 			Pokracovat:=Prvek(H,Z);
 		end
-		else if V < 2 then begin
+		else if V < 2 then begin{chybny vyraz}
+			ok:=false;
 			writeln(CHYBA);
 			Pokracovat:=false;
 		end else begin {na vstupu znamenko}
@@ -102,12 +113,13 @@ begin
 	if V>1 then begin
 		ok:=false;
 		writeln(CHYBA);
-	end else begin ok:=true; PostfixVyhodnoceni:=Zas[1]; end
+	end else begin PostfixVyhodnoceni:=Zas[1]; end;
 end;
 
 begin
+dalsi:='*'; empty:=true;
 cislo:=['0','1','2','3','4','5','6','7','8','9'];
-povoleno:=cislo+['+','-','*','/', chr(10)];
+povoleno:=cislo+['+','-','*','/'];
 vysl:=PostfixVyhodnoceni(ok2);
 if ok2 then writeln(vysl);
 end.
