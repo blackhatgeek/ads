@@ -15,30 +15,10 @@ program postfix;
 
 const CHYBA='Chyba!';
 
-{implementuji binarni strom}
-type	Uk = ^Uzel;
-	Uzel = record
-		Hodnota:integer;
-		Znak:char;
-		L,P:Uk;
-	end;
 var	povoleno,cislo:set of char;
-	vysl:integer;
+	vysl:longint;
 	ok2,empty:boolean;
 	dalsi:char;
-
-{pruchod stromem s korenem K metodou postorder}
-{vypsani aritmetickeho vyrazu v postfixove notaci}
-procedure vypis(K:Uk);
-begin
-	if K^.L = nil then {list}
-		write(K^.Hodnota, ' ')
-	else begin
-		vypis(K^.L);
-		vypis(K^.P);
-		write(K^.Znak);
-	end
-end;
 
 {pomocna funkce pro cteni vyrazu ve vstupu po prvcich}
 {cely vyraz musi byt na vstupu zapsan na jednom radku}
@@ -46,9 +26,9 @@ end;
 {funkcni hodnota - zda se jeste precetl dalsi prvek}
 {Hodnota, Znak - predani precteneho prvku}
 {pokud se cetlo cislo, bude znak '$' jako priznak}
-function Prvek(var Hodnota:integer; var Znak:char):boolean;
+function Prvek(var Hodnota:longint; var Znak:char):boolean;
 var	Z:char;
-	H:integer;
+	H:longint;
 begin
 	if empty then repeat read(z) until ((Z in povoleno) or eof(input))
 	else begin
@@ -77,11 +57,11 @@ end;
 
 {vyhodnoceni aritmet. vyrazu zapsaneho v postfixu}
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
-function PostfixVyhodnoceni(var ok:boolean):integer;
+function PostfixVyhodnoceni(var ok:boolean):longint;
 const	Max = 100;{max pocet operandu ve vyrazu}
-var	Zas: array [1..Max] of integer; {pracovni zasobnik}
+var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
-	H,H1,H2:integer;{hodnoty operandu}
+	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
 	Pokracovat:boolean;
 begin
