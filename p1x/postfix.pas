@@ -23,6 +23,8 @@ type	Uk = ^Uzel;
 		L,P:Uk;
 	end;
 var povoleno,cislo:set of char;
+var vysl:integer;
+var ok2:boolean;
 
 {pruchod stromem s korenem K metodou postorder}
 {vypsani aritmetickeho vyrazu v postfixove notaci}
@@ -47,7 +49,7 @@ function Prvek(var Hodnota:integer; var Znak:char):boolean;
 var	Z:char;
 	H:integer;
 begin
-	repeat read(z) until (Z in povoleno);
+	repeat read(z) until ((Z in povoleno) or eof(input));
 	if ord(Z)=10 then Prvek:=false else begin
 		Prvek:=true;
 		if(Z>='0')and(Z<='9') then begin
@@ -66,7 +68,7 @@ end;
 
 {vyhodnoceni aritmet. vyrazu zapsaneho v postfixu}
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
-function PostfixVyhodnoceni:integer;
+function PostfixVyhodnoceni(var ok:boolean):integer;
 const	Max = 100;{max pocet operandu ve vyrazu}
 var	Zas: array [1..Max] of integer; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
@@ -97,11 +99,15 @@ begin
 			Pokracovat:=Prvek(H,Z);
 		end;
 	end;
-	if V>1 then writeln(CHYBA) else PostfixVyhodnoceni:=Zas[1];
+	if V>1 then begin
+		ok:=false;
+		writeln(CHYBA);
+	end else begin ok:=true; PostfixVyhodnoceni:=Zas[1]; end
 end;
 
 begin
 cislo:=['0','1','2','3','4','5','6','7','8','9'];
 povoleno:=cislo+['+','-','*','/', chr(10)];
-writeln(PostfixVyhodnoceni);
+vysl:=PostfixVyhodnoceni(ok2);
+if ok2 then writeln(vysl);
 end.
