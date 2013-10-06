@@ -46,16 +46,18 @@ function Prvek(var Hodnota:integer; var Znak:char):boolean;
 var	Z:char;
 	H:integer;
 begin
-	if eof then Prvek:=false else begin
+	repeat read(z) until Z<>' ';
+	writeln('-> Z=',Z,',',ord(Z));
+	if ord(Z)=10 then Prvek:=false else begin
+		writeln('->TRUE');
 		Prvek:=true;
-		repeat read(z) until Z<>' ';
 		if(Z>='0')and(Z<='9') then begin
 			Znak:='$';{na vstupu je cislo}
 			H:=0;
 			repeat
 				h:=H*10+ord(Z)-ord('0');
 				read(Z)
-			until Z = ' ';
+			until (Z = ' ') or eof;
 			Hodnota:=H
 		end else Znak:=Z
 	end
