@@ -1,2 +1,3 @@
 postfix.pas	Evaluace postfixni notace
-zavorky.c	Pocat spravnych uzavorkovani
+
+zavorky.c	Pocet spravnych uzavorkovani
