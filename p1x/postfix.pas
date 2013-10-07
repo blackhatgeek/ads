@@ -84,7 +84,10 @@ begin
 				'+': H:=H1+H2;
 				'-': H:=H1-H2;
 				'*': H:=H1*H2;
-				'/': H:=H1 div H2;
+				'/': if H2<>0 then H:=H1 div H2 else begin
+						ok:=false;
+						writeln(CHYBA);
+					end;
 			end;
 			Zas[V]:=H;{vysledek dame do zasobniku}
 			Pokracovat:=Prvek(H,Z);
