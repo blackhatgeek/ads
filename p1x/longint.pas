@@ -4,7 +4,7 @@ type
 cislice=0..9;
 longint_32=array[1..10] of cislice;
 longint_32a=array[0..10] of cislice;{kontrola preteceni}
-longint_32b=record cislo:longint32_a; znamenko:boolean end;{rozdil}
+longint_32b=record cislo:longint_32a; znamenko:boolean end;{rozdil}
 zaznam=record c:cislice; p:boolean end;
 
 var 
@@ -35,15 +35,15 @@ begin
 end;
 
 function f_rozdil(a,b:longint_32):longint_32b;
-var aa,bb,cc:longint32_a;prohoz:boolean;vysl:longint_32b;
+var aa,bb,cc:longint_32a;delka_a,delka_b:integer;pom:longint_32;stav:boolean;vysl:longint_32b;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
 	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=10-i;
 	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=10-i;
-	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i vysl.znamenko:=false end 
+	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; vysl.znamenko:=false end 
 	else if delka_a=delka_b then begin 
 		vysl.znamenko:=true; i:=0; 
-		while (!vysl.znamenko) or (i<10) do
+		while (not vysl.znamenko) or (i<10) do
 			if a[i]<b[i] then vysl.znamenko:=false else i:=i+1;
 	end;
 	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to 10 do aa[i]:=a[i];
