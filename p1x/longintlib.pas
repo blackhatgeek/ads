@@ -173,7 +173,7 @@ begin
 		end;
 	for i:=1 to 9 do begin{mensenec}
 		k:=0;
-		for j:=(i+1) to 10 do begin{mensitel}
+		for j:=(i+1) to 9 do begin{mensitel}
 			rozd_s[j,i].c:=k;
 			rozd_s[j,i].p:=false;
 			k:=k+1;
