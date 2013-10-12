@@ -68,6 +68,7 @@ begin
 	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to 10 do aa[i]:=a[i];
 	{kratsi z cisel doplnime z leva tolika nulami, aby byla stejne dlouha}
 	bb[0]:=0; for i:=1 to (delka_a-delka_b-1) do bb[i]:=0;
+	for i:=(delka_a-delka_b) to 10 do bb[i]:=b[i];
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{rozdil dvou stejne velkych cisel, vetsi - mensi}
 	{na zacatku je stav bez prenosu}stav:=false;
@@ -153,11 +154,6 @@ begin
 			k:=k+1;
 		end;
 	end;
-	for i:=0 to 9 do begin
-		for j:=0 to 9 do if rozd_bez[j,i].p then write('[',rozd_bez[j,i].c,'] ') else write(rozd_bez[j,i].c,' ');
-		writeln('');
-	end;
-	writeln('');
 	{naplnim pole pro stav s prenosem}
 	rozd_s[0,0].c:=9;rozd_s[0,0].p:=false;
 	k:=0;
@@ -179,13 +175,10 @@ begin
 			k:=k+1;
 		end;
 	end;
-	for i:=0 to 9 do begin
-		for j:=0 to 9 do if rozd_s[j,i].p then write('[',rozd_s[j,i].c,'] ') else write(rozd_s[j,i].c,' ');
-		writeln('');
-	end;
-	writeln('');
-	q:=f_soucet(convert0(222222222),convert0(222222222));
-	r:=f_rozdil(convert0(222222222),convert0(222222222));
+	q:=f_soucet(convert0(65535),convert0(1));
+	r:=f_rozdil(convert0(65535),convert0(1));
+	print0(convert3(q));
+	print1(q);
 	print0(convert3(r.cislo));
 	print1(r.cislo);
 end.
