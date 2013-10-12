@@ -63,7 +63,8 @@ var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
-	Pokracovat:boolean;
+	Pokracovat,zapor:boolean;
+	i:integer;
 begin
 	ok:=true;
 	V:=0;
@@ -83,8 +84,26 @@ begin
 			case Z of
 				'+': H:=H1+H2;
 				'-': H:=H1-H2;
-				'*': H:=H1*H2;
-				'/': if H2<>0 then H:=H1 div H2 else begin
+				'*': begin
+					H:=0;
+					if H2>H1 then begin
+						H:=H2;
+						H2:=H1;
+						H1:=H;
+						H:=0
+					end;{pricitam mensi cislo}
+					if H2=0 then H:=0 else if H2=1 then H:=H1 else
+					for i:=1 to H1 do H:=H+H2;{nasobeni je scitani}
+				end;
+				'/': if H2<>0 then begin
+					if(((H1<0) and (H2>0)) or ((H2<0) and (H1>0))) then zapor:=true else zapor:=false;
+					H:=0;
+					while((abs(H1)-abs(H2))>=0) do begin
+						H:=H+1;
+						H1:=H1-H2;
+					end;{deleni je odcitani}
+					if zapor then H:=-H
+				end else begin
 						ok:=false;
 						writeln(CHYBA);
 					end;
