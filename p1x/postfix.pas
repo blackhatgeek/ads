@@ -78,35 +78,31 @@ begin
 	f_soucet:=c;
 end;
 
-function f_rozdil(a,b:longint_32):longint_32b;
+function f_rozdil(a,b:longint_32;var znamenko:boolean):longint_32;
 var aa,bb,cc:longint_32a;delka_a,delka_b:integer;pom:longint_32;stav:boolean;vysl:longint_32b;
+c:longint_32;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
 	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
 	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
-	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; vysl.znamenko:=false end 
+	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; znamenko:=false end 
 	else if delka_a=delka_b then begin 
-		vysl.znamenko:=true; i:=0; 
-		while (not vysl.znamenko) or (i<n) do
-			if a[i]<b[i] then vysl.znamenko:=false else i:=i+1;
+		znamenko:=true; i:=0; 
+		while (not znamenko) or (i<n) do
+			if a[i]<b[i] then znamenko:=false else i:=i+1;
 	end;
-	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to n do aa[i]:=a[i];
-	{kratsi z cisel doplnime z leva tolika nulami, aby byla stejne dlouha}
-	bb[0]:=0; for i:=1 to (delka_a-delka_b-1) do bb[i]:=0;
-	for i:=(delka_a-delka_b) to n do bb[i]:=b[i];
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{rozdil dvou stejne velkych cisel, vetsi - mensi}
 	{na zacatku je stav bez prenosu}stav:=false;
 	for i:=n downto 0 do
 		if stav=false then begin
-			cc[i]:=rozd_bez[aa[i],bb[i]].c;
-			stav:=rozd_bez[aa[i],bb[i]].p;
+			c[i]:=rozd_bez[a[i],b[i]].c;
+			stav:=rozd_bez[a[i],b[i]].p;
 		end else begin
-			cc[i]:=rozd_s[aa[i],bb[i]].c;
-			stav:=rozd_s[aa[i],bb[i]].p;
+			c[i]:=rozd_s[a[i],b[i]].c;
+			stav:=rozd_s[a[i],b[i]].p;
 		end;
-	vysl.cislo:=cc;
-	f_rozdil:=vysl;
+	f_rozdil:=c;
 end;
 
 {pomocna funkce pro cteni vyrazu ve vstupu po prvcich}
@@ -178,7 +174,8 @@ begin
 				end;
 				'-': begin
 					H:=H1-H2;
-					O:=f_rozdil(convert0(H1),convert0(H2));
+					soucet:=f_rozdil(convert0(H1),convert0(H2),zapor);
+					zapor:=not zapor;
 				end;
 				'*': begin
 					H:=0;
