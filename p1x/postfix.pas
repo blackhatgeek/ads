@@ -146,8 +146,8 @@ var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
-	Pokracovat,zapor:boolean;
-	soucet:longint_32;
+	Pokracovat,zapor,q:boolean;
+	soucet,O2:longint_32;
 begin
 	ok:=true;
 	V:=0;
@@ -182,15 +182,24 @@ begin
 						H1:=H;
 						H:=0
 					end;{pricitam mensi cislo}
-					if H2=0 then H:=0 else if H2=1 then H:=H1 else
-					for i:=1 to H1 do H:=H+H2;{nasobeni je scitani}
+					if H2=0 then H:=0 else if H2=1 then H:=H1 else begin
+						soucet:=convert0(H1);
+						O2:=convert0(H2);
+						for i:=1 to H1 do begin
+							H:=H+H2;{nasobeni je scitani}
+							soucet:=f_soucet(soucet,O2);
+						end
+					end
 				end;
 				'/': if H2<>0 then begin
 					if(((H1<0) and (H2>0)) or ((H2<0) and (H1>0))) then zapor:=true else zapor:=false;
 					H:=0;
+					O2:=convert0(H2);
+					soucet:=convert0(H1);
 					while((abs(H1)-abs(H2))>=0) do begin
 						H:=H+1;
 						H1:=H1-H2;
+						soucet:=f_rozdil(soucet,O2,q);
 					end;{deleni je odcitani}
 					if zapor then H:=-H
 				end else begin
