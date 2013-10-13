@@ -29,6 +29,7 @@ var	povoleno,cislo:set of char;
 	dalsi:char;
 	souc_bez,souc_s,rozd_bez,rozd_s:array[cislice,cislice] of zaznam;
 	i,j,k:integer;
+	nula,jedna:longint_32;
 
 function convert0(a:longint):longint_32;
 var res:longint_32;
@@ -58,6 +59,18 @@ begin
 	for i:=1 to n do res[i]:=a[i];
 	convert3:=res;
 end;
+
+function vetsi(a,b:longint_32;var eq:boolean):boolean;
+var i:integer; res:boolean;
+begin
+	i:=1; res:=true; eq:=true;
+	while (i<=n) and (res) do begin
+		if a[i]<b[i] then res:=false;
+		if a[i]<>b[i] then eq:=false;
+	end;
+	vetsi:=res;
+end;
+
 
 function f_soucet(a,b:longint_32):longint_32;
 var stav:boolean; c:longint_32;
@@ -169,27 +182,36 @@ begin
 			case Z of
 				'+': begin
 					{H:=H1+H2;}
-					O:=f_soucet(convert0(h1),convert0(h2));
+					O:=f_soucet(O1,O2);
 				end;
 				'-': begin
 					{H:=H1-H2;}
-					O:=f_rozdil(convert0(H1),convert0(H2),zapor);
+					O:=f_rozdil(O1,O2,zapor);
 					zapor:=not zapor;
 				end;
 				'*': begin
-					H:=0;
-					if H2>H1 then begin
-						H:=H2;
+					{H:=0;}
+					O:=nula;
+					if vetsi(O2,O1,q) then begin
+						O:=O2;
+						O2:=O1;
+						O1:=O;
+						O:=nula;
+						{H:=H2;
 						H2:=H1;
 						H1:=H;
-						H:=0
+						H:=0}
 					end;{pricitam mensi cislo}
-					if H2=0 then H:=0 else if H2=1 then H:=H1 else begin
-						soucet:=convert0(H1);
-						O2:=convert0(H2);
-						for i:=1 to H1 do begin
-							H:=H+H2;{nasobeni je scitani}
-							soucet:=f_soucet(soucet,O2);
+					vetsi(O2,nula,q);
+					if q then O:=nula else begin
+						vetsi(O2,jedna,q);
+						if q then O:=O1 else begin
+							soucet:=O1;
+							{O2:=convert0(H2);}
+							for i:=1 to convert1(O1) do begin
+								{H:=H+H2;nasobeni je scitani}
+								soucet:=f_soucet(soucet,O2);
+							end
 						end
 					end
 				end;
@@ -217,7 +239,7 @@ begin
 	if V>1 then begin
 		ok:=false;
 		writeln(CHYBA);
-	end else begin PostfixVyhodnoceni:=Zas[1]; end;
+	end else begin PostfixVyhodnoceni:=convert1(Zas[1]); end;
 end;
 
 procedure print0(a:longint_32);
@@ -294,6 +316,12 @@ begin
 			k:=k+1;
 		end;
 	end;
+	{NULA}
+	for i:=1 to n do nula[i]:=0;
+	{JEDNA}
+	jedna:=nula;
+	jedna[n]:=1;
+	
 
 dalsi:='*'; empty:=true;
 cislo:=['0','1','2','3','4','5','6','7','8','9'];
