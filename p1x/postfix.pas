@@ -167,7 +167,7 @@ var	Zas: array [1..Max] of longint_32; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
-	Pokracovat,zapor,q:boolean;
+	Pokracovat,zapor,p,q:boolean;
 	soucet,O,O2,O1:longint_32;
 	pom,i:integer;
 begin
@@ -190,26 +190,19 @@ begin
 			O1:=Zas[V]; {levy operand ze zasobniku}
 			case Z of
 				'+': begin
-					{H:=H1+H2;}
 					O:=f_soucet(O1,O2);
 				end;
 				'-': begin
-					{H:=H1-H2;}
 					O:=f_rozdil(O1,O2,zapor);
 					zapor:=not zapor;
 				end;
 				'*': begin
-					{H:=0;}
 					O:=nula;
 					if vetsi(O2,O1,q) then begin
 						O:=O2;
 						O2:=O1;
 						O1:=O;
 						O:=nula;
-						{H:=H2;
-						H2:=H1;
-						H1:=H;
-						H:=0}
 					end;{pricitam mensi cislo}
 					vetsi(O2,nula,q);
 					if q then O:=nula else begin
@@ -217,11 +210,9 @@ begin
 						if q then O:=O1 else begin
 							soucet:=nula;
 							print0(soucet);
-							{O2:=convert0(H2);}
 							pom:=convert1(O1);
 							writeln(pom);
 							for i:=1 to pom do begin
-								{H:=H+H2;nasobeni je scitani}
 								soucet:=f_soucet(soucet,O2);
 							end;
 							O:=soucet;
@@ -229,22 +220,26 @@ begin
 					end
 				end;
 				'/': if H2<>0 then begin
-					if(((H1<0) and (H2>0)) or ((H2<0) and (H1>0))) then zapor:=true else zapor:=false;
+					vetsi(O1,nula,q);
+					vetsi(O2,nula,p);
+					if(((not q) and (p)) or ((not p) and (q))) then zapor:=true else zapor:=false;
 					H:=0;
-					O2:=convert0(H2);
-					soucet:=convert0(H1);
-					while((abs(H1)-abs(H2))>=0) do begin
+					{O2:=convert0(H2);}
+					{soucet:=convert0(H1);}soucet:=O1;
+					vetsi(f_rozdil(O1,O2),nula,p);
+					while(p) do begin
 						H:=H+1;
-						H1:=H1-H2;
+						{H1:=H1-H2;}
+						O1:=f_rozdil(O1,O2,q);
 						soucet:=f_rozdil(soucet,O2,q);
+						vetsi(f_rozdil(O1,O2),nula,p);
 					end;{deleni je odcitani}
-					if zapor then H:=-H
 				end else begin
 						ok:=false;
 						writeln(CHYBA);
 					end;
 			end;
-			Zas[V]:=O;{vysledek dame do zasobniku}
+			Zas[V]:=O;{vysledek dame do zasobniku a ztratime znamenko}
 			Pokracovat:=Prvek(H,Z);
 			O:=convert0(H);
 		end;
