@@ -14,11 +14,12 @@ program postfix;
  Tečka a ani čárka (kterou by bylo možno považovat za desetinnou) se v testech nevyskytuje.}
 
 const CHYBA='Chyba!';
+const n=10;
 
 type 
 cislice=0..9;
-longint_32=array[1..10] of cislice;
-longint_32a=array[0..10] of cislice;{kontrola preteceni}
+longint_32=array[1..n] of cislice;
+longint_32a=array[0..n] of cislice;{kontrola preteceni}
 longint_32b=record cislo:longint_32a; znamenko:boolean end;{rozdil}
 zaznam=record c:cislice; p:boolean end;
 
@@ -32,7 +33,7 @@ var	povoleno,cislo:set of char;
 function convert0(a:longint):longint_32;
 var res:longint_32;
 begin
-	for i:=10 downto 1 do begin
+	for i:=n downto 1 do begin
 		res[i]:=a mod 10;
 		a:=a div 10;
 	end;
@@ -44,7 +45,7 @@ var res:longint;faktor:integer;
 begin
 	faktor:=1;
 	res:=0;
-	for i:=10 downto 1 do begin
+	for i:=n downto 1 do begin
 		res:=res+faktor*a[i];
 		faktor:=faktor*10;
 	end;
@@ -54,7 +55,7 @@ end;
 function convert3(a:longint_32a):longint_32;
 var res:longint_32;
 begin
-	for i:=1 to 10 do res[i]:=a[i];
+	for i:=1 to n do res[i]:=a[i];
 	convert3:=res;
 end;
 
@@ -62,16 +63,16 @@ function f_soucet(a,b:longint_32):longint_32a;
 var aa,bb,cc:longint_32a; delka_a,delka_b:integer;pom:longint_32; stav:boolean;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
-	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=10-i;
-	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=10-i;
+	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
+	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
 	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i end;
-	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to 10 do aa[i]:=a[i];
+	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to n do aa[i]:=a[i];
 	{kratsi z cisel doplnime z leva tolika nulami, aby byla stejne dlouha}
 	bb[0]:=0; for i:=1 to (delka_a-delka_b-1) do bb[i]:=0;
 	for i:=(delka_a-delka_b) to delka_b do bb[i]:=b[i];
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{na zacatku je stav bez prenosu}stav:=false;
-	for i:=10 downto 0 do begin
+	for i:=n downto 0 do begin
 		{if stav then writeln('s prenosem') else writeln('bez prenosu');}
 		if stav=false then begin
 			cc[i]:=souc_bez[aa[i],bb[i]].c;
@@ -88,22 +89,22 @@ function f_rozdil(a,b:longint_32):longint_32b;
 var aa,bb,cc:longint_32a;delka_a,delka_b:integer;pom:longint_32;stav:boolean;vysl:longint_32b;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
-	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=10-i;
-	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=10-i;
+	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
+	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
 	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; vysl.znamenko:=false end 
 	else if delka_a=delka_b then begin 
 		vysl.znamenko:=true; i:=0; 
-		while (not vysl.znamenko) or (i<10) do
+		while (not vysl.znamenko) or (i<n) do
 			if a[i]<b[i] then vysl.znamenko:=false else i:=i+1;
 	end;
-	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to 10 do aa[i]:=a[i];
+	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to n do aa[i]:=a[i];
 	{kratsi z cisel doplnime z leva tolika nulami, aby byla stejne dlouha}
 	bb[0]:=0; for i:=1 to (delka_a-delka_b-1) do bb[i]:=0;
-	for i:=(delka_a-delka_b) to 10 do bb[i]:=b[i];
+	for i:=(delka_a-delka_b) to n do bb[i]:=b[i];
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{rozdil dvou stejne velkych cisel, vetsi - mensi}
 	{na zacatku je stav bez prenosu}stav:=false;
-	for i:=10 downto 0 do
+	for i:=n downto 0 do
 		if stav=false then begin
 			cc[i]:=rozd_bez[aa[i],bb[i]].c;
 			stav:=rozd_bez[aa[i],bb[i]].p;
