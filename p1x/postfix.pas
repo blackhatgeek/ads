@@ -142,36 +142,38 @@ end;
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
 function PostfixVyhodnoceni(var ok:boolean):longint;
 const	Max = 100;{max pocet operandu ve vyrazu}
-var	Zas: array [1..Max] of longint; {pracovni zasobnik}
+var	Zas: array [1..Max] of longint_32; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
 	Pokracovat,zapor,q:boolean;
-	soucet,O2:longint_32;
+	soucet,O,O2,O1:longint_32;
 begin
 	ok:=true;
 	V:=0;
 	Pokracovat:=Prvek(H,Z);
+	O:=convert0(H);
 	while Pokracovat do begin
 		if Z='$' then begin {na vstupu cislo}
-			V:=V+1; Zas[V]:=H; {operand dame do zasobniku}
+			V:=V+1; Zas[V]:=O; {operand dame do zasobniku}
 			Pokracovat:=Prvek(H,Z);
+			O:=convert0(H);{nastane?}
 		end
 		else if V < 2 then begin{chybny vyraz}
 			ok:=false;
 			writeln(CHYBA);
 			Pokracovat:=false;
 		end else begin {na vstupu znamenko}
-			H2:=Zas[V]; V:=V-1; {pravy operand ze zasobniku}
-			H1:=Zas[V]; {levy operand ze zasobniku}
+			O2:=Zas[V]; V:=V-1; {pravy operand ze zasobniku}
+			O1:=Zas[V]; {levy operand ze zasobniku}
 			case Z of
 				'+': begin
-					H:=H1+H2;
-					soucet:=f_soucet(convert0(h1),convert0(h2));
+					{H:=H1+H2;}
+					O:=f_soucet(convert0(h1),convert0(h2));
 				end;
 				'-': begin
-					H:=H1-H2;
-					soucet:=f_rozdil(convert0(H1),convert0(H2),zapor);
+					{H:=H1-H2;}
+					O:=f_rozdil(convert0(H1),convert0(H2),zapor);
 					zapor:=not zapor;
 				end;
 				'*': begin
@@ -207,8 +209,9 @@ begin
 						writeln(CHYBA);
 					end;
 			end;
-			Zas[V]:=H;{vysledek dame do zasobniku}
+			Zas[V]:=O;{vysledek dame do zasobniku}
 			Pokracovat:=Prvek(H,Z);
+			O:=convert0(H);
 		end;
 	end;
 	if V>1 then begin
