@@ -117,7 +117,7 @@ begin
 		{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
 		delka_a:=0;i:=0;while a.cislo[i]<>0 do i:=i+1; delka_a:=n-i;
 		delka_b:=0;i:=0;while b.cislo[i]<>0 do i:=i+1; delka_b:=n-i;
-		{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; znamenko:=false end 
+		{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; c.znamenko:=false end 
 		else if delka_a=delka_b then begin 
 			c.znamenko:=true; i:=0; 
 			while (not c.znamenko) or (i<n) do
@@ -173,10 +173,11 @@ begin
 	end
 end;
 
-procedure print0(a:longint_32);
+procedure print0(a:s_longint_32);
 var i:integer;
 begin
-	for i:=1 to n do write(a[i],' ');
+	if a.znamenko=false then write('-');
+	for i:=1 to n do write(a.cislo[i]);
 	writeln('');
 end;
 
@@ -184,12 +185,12 @@ end;
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
 function PostfixVyhodnoceni(var ok:boolean):longint;
 const	Max = 100;{max pocet operandu ve vyrazu}
-var	Zas: array [1..Max] of longint_32; {pracovni zasobnik}
+var	Zas: array [1..Max] of s_longint_32; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
 	Pokracovat,zapor,p,q,r:boolean;
-	soucet,O,O2,O1:longint_32;
+	soucet,O,O2,O1:s_longint_32;
 	pom,i:integer;
 begin
 	ok:=true;
@@ -214,10 +215,9 @@ begin
 					O:=f_soucet(O1,O2);
 				end;
 				'-': begin
-					O:=f_rozdil(O1,O2,zapor);
-					zapor:=not zapor;
+					O:=f_rozdil(O1,O2);
 				end;
-				'*': begin
+				'*': begin{zde q je pomocna promenna, kterou pouzivame pri porovnani na rovnost}
 					O:=nula;
 					if vetsi(O2,O1,q) then begin
 						O:=O2;
@@ -226,9 +226,10 @@ begin
 						O:=nula;
 					end;{pricitam mensi cislo}
 					vetsi(O2,nula,q);
-					if q then O:=nula else begin
+					if q{O2='nula'} then O:=nula else begin
 						vetsi(O2,jedna,q);
-						if q then O:=O1 else begin
+						if q{O2=1} then O:=O1 
+						else begin
 							soucet:=nula;
 							print0(soucet);
 							pom:=convert1(O1);
@@ -240,25 +241,28 @@ begin
 						end
 					end
 				end;
-				'/': if O2<>nula then begin
-					vetsi(O1,nula,q);
-					vetsi(O2,nula,p);
-					if(((not q) and (p)) or ((not p) and (q))) then zapor:=true else zapor:=false;
-					H:=0;
-					{O2:=convert0(H2);}
-					{soucet:=convert0(H1);}soucet:=O1;
-					vetsi(f_rozdil(O1,O2,r),nula,p);
-					while(p) do begin
-						H:=H+1;
-						{H1:=H1-H2;}
-						O1:=f_rozdil(O1,O2,q);
-						soucet:=f_rozdil(soucet,O2,q);
-						vetsi(f_rozdil(O1,O2),nula,p);
-					end;{deleni je odcitani}
+				'/': begin
+					vetsi(O2,nula,q);
+					if not q {O2<>nula} then begin
+						{vetsi(O1,nula,q);
+						vetsi(O2,nula,p);
+						if(((not q) and (p)) or ((not p) and (q))) then zapor:=true else zapor:=false;}
+						H:=0;
+						{O2:=convert0(H2);}
+						{soucet:=convert0(H1);}soucet:=O1;
+						vetsi(f_rozdil(O1,O2),nula,p);{p:=(O1-O2)>"nula"}
+						while(p) do begin
+							H:=H+1;
+							{H1:=H1-H2;}
+							O1:=f_rozdil(O1,O2);
+							soucet:=f_rozdil(soucet,O2);
+							vetsi(f_rozdil(O1,O2),nula,p);
+						end;{deleni je odcitani}
+					end
 				end else begin
-						ok:=false;
-						writeln(CHYBA);
-					end;
+					ok:=false;
+					writeln(CHYBA);
+				end;
 			end;
 			Zas[V]:=O;{vysledek dame do zasobniku a ztratime znamenko}
 			Pokracovat:=Prvek(H,Z);
