@@ -79,45 +79,56 @@ begin
 	c.znamenko:=true;
 	if (a.znamenko=false) and (b.znamenko=true) then c:=f_rozdil(b,a)
 	else if (b.znamenko=false) and (a.znamenko=true) then c:=f_rozdil(a,b)
-	else  {a,b stejne} if a.znamenko=false then c.znamenko:=false;
-	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
-	{na zacatku je stav bez prenosu}stav:=false;
-	for i:=n downto 0 do begin
-		if stav=false then begin
-			c.cislo[i]:=souc_bez[a[i],b[i]].c;
-			stav:=souc_bez[a[i],b[i]].p;	
-		end else begin
-			c.cislo[i]:=souc_s[a[i],b[i]].c;
-			stav:=souc_s[a[i],b[i]].p;
+	else  begin
+		{a,b stejne} if a.znamenko=false then c.znamenko:=false;
+		{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
+		{na zacatku je stav bez prenosu}stav:=false;
+		for i:=n downto 0 do begin
+			if stav=false then begin
+				c.cislo[i]:=souc_bez[a[i],b[i]].c;
+				stav:=souc_bez[a[i],b[i]].p;	
+			end else begin
+				c.cislo[i]:=souc_s[a[i],b[i]].c;
+				stav:=souc_s[a[i],b[i]].p;
+			end;
 		end;
 	end;
 	f_soucet:=c;
 end;
 
-function f_rozdil(a,b:s_longint_32;var znamenko:boolean):s_longint_32;
-var stav:boolean; c:longint_32; delka_a, delka_b,i:integer;pom:longint_32;
+function f_rozdil(a,b:s_longint_32):s_longint_32;
+var stav:boolean; c:s_longint_32; delka_a, delka_b,i:integer;pom:s_longint_32;
 begin
-	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
-	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
-	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
-	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; znamenko:=false end 
-	else if delka_a=delka_b then begin 
-		znamenko:=true; i:=0; 
-		while (not znamenko) or (i<n) do
-			if a[i]<b[i] then znamenko:=false else i:=i+1;
-	end;
-	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
-	{rozdil dvou stejne velkych cisel, vetsi - mensi}
-	{na zacatku je stav bez prenosu}stav:=false;
-	for i:=n downto 0 do
-		if stav=false then begin
-			c[i]:=rozd_bez[a[i],b[i]].c;
-			stav:=rozd_bez[a[i],b[i]].p;
-		end else begin
-			c[i]:=rozd_s[a[i],b[i]].c;
-			stav:=rozd_s[a[i],b[i]].p;
+	if (a.znamenko=false)and (b.znamenko=false) then c:=f_soucet(a,b)
+	else if (a.znamenko=false) and (b.znamenko=true) {-1 - 1} then begin
+		b.znamenko:=false; {-1 + -1}
+		c:=f_soucet(a,b);
+	else if (a.znamenko=true) and (b.znamenko=false) then begin {1 - -1}
+		b.znamenko:=true;
+		c:=f_soucet(a,b);{1+1}
+	end else begin
+		{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
+		delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
+		delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
+		{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; znamenko:=false end 
+		else if delka_a=delka_b then begin 
+			znamenko:=true; i:=0; 
+			while (not znamenko) or (i<n) do
+				if a[i]<b[i] then znamenko:=false else i:=i+1;
 		end;
-	f_rozdil:=c;
+		{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
+		{rozdil dvou stejne velkych cisel, vetsi - mensi}
+		{na zacatku je stav bez prenosu}stav:=false;
+		for i:=n downto 0 do
+			if stav=false then begin
+				c[i]:=rozd_bez[a[i],b[i]].c;
+				stav:=rozd_bez[a[i],b[i]].p;
+			end else begin
+				c[i]:=rozd_s[a[i],b[i]].c;
+				stav:=rozd_s[a[i],b[i]].p;
+			end;
+		f_rozdil:=c;
+	end
 end;
 
 {pomocna funkce pro cteni vyrazu ve vstupu po prvcich}
