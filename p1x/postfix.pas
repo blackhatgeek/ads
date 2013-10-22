@@ -48,8 +48,8 @@ var res,faktor:longint;i:integer;
 begin
 	faktor:=1;
 	res:=0;
-	if a.cislo[n]<>0 then writeln(CHYBA) else
-	for i:=(n-1) downto 1 do begin
+	if a.cislo[1]<>0 then writeln(CHYBA) else
+	for i:=n downto 2 do begin
 		res:=res+faktor*a.cislo[i];
 		faktor:=faktor*10;
 	end;
@@ -94,7 +94,7 @@ begin
 		{a,b stejne} if a.znamenko=false then c.znamenko:=false;
 		{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 		{na zacatku je stav bez prenosu}stav:=false;
-		for i:=n downto 0 do begin
+		for i:=n downto 1 do begin
 			if stav=false then begin
 				c.cislo[i]:=souc_bez[a.cislo[i],b.cislo[i]].c;
 				stav:=souc_bez[a.cislo[i],b.cislo[i]].p;	
