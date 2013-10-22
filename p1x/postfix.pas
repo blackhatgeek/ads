@@ -72,6 +72,14 @@ begin
 	vetsi:=res;
 end;
 
+procedure print0(a:s_longint_32);
+var i:integer;
+begin
+	if a.znamenko=false then write('-');
+	for i:=1 to n do write(a.cislo[i]);
+	writeln('');
+end;
+
 function f_rozdil(a,b:s_longint_32):s_longint_32; forward;
 
 function f_soucet(a,b:s_longint_32):s_longint_32;
@@ -115,18 +123,20 @@ begin
 			a.znamenko:=true;{(+1) - (+1), prohozeny mensenec a mensitel}
 		end;
 		{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
-		delka_a:=0;i:=0;while a.cislo[i]<>0 do i:=i+1; delka_a:=n-i;
-		delka_b:=0;i:=0;while b.cislo[i]<>0 do i:=i+1; delka_b:=n-i;
+		delka_a:=0;i:=1;while a.cislo[i]=0 do i:=i+1; delka_a:=n+1-i;
+		delka_b:=0;i:=1;while b.cislo[i]=0 do i:=i+1; delka_b:=n+1-i;
+		c:=nula;
 		{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; c.znamenko:=false end 
 		else if delka_a=delka_b then begin 
 			c.znamenko:=true; i:=0; 
 			while (not c.znamenko) or (i<n) do
 				if a.cislo[i]<b.cislo[i] then c.znamenko:=false else i:=i+1;
 		end;
+		
 		{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 		{rozdil dvou stejne velkych cisel, vetsi - mensi}
 		{na zacatku je stav bez prenosu}stav:=false;
-		for i:=n downto 0 do
+		for i:=n downto 1 do begin
 			if stav=false then begin
 				c.cislo[i]:=rozd_bez[a.cislo[i],b.cislo[i]].c;
 				stav:=rozd_bez[a.cislo[i],b.cislo[i]].p;
@@ -134,6 +144,7 @@ begin
 				c.cislo[i]:=rozd_s[a.cislo[i],b.cislo[i]].c;
 				stav:=rozd_s[a.cislo[i],b.cislo[i]].p;
 			end;
+		end;
 		f_rozdil:=c;
 	end
 end;
@@ -173,14 +184,6 @@ begin
 	end
 end;
 
-procedure print0(a:s_longint_32);
-var i:integer;
-begin
-	if a.znamenko=false then write('-');
-	for i:=1 to n do write(a.cislo[i]);
-	writeln('');
-end;
-
 {vyhodnoceni aritmet. vyrazu zapsaneho v postfixu}
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
 function PostfixVyhodnoceni(var ok:boolean):longint;
@@ -212,29 +215,39 @@ begin
 			O1:=Zas[V]; {levy operand ze zasobniku}
 			case Z of
 				'+': begin
+					writeln('Scitam:');
+					print0(O1);
+					print0(O2);
 					O:=f_soucet(O1,O2);
 				end;
 				'-': begin
+					writeln('Odcitam:');
+					print0(O1);
+					print0(O2);
 					O:=f_rozdil(O1,O2);
 				end;
 				'*': begin{zde q je pomocna promenna, kterou pouzivame pri porovnani na rovnost}
 					O:=nula;
 					if vetsi(O2,O1,q) then begin
+						writeln('Prohazuji O2 a O1');
 						O:=O2;
 						O2:=O1;
 						O1:=O;
 						O:=nula;
 					end;{pricitam mensi cislo}
 					vetsi(O2,nula,q);
-					if q{O2='nula'} then O:=nula else begin
+					if q{O2='nula'} then begin O:=nula; writeln('O2 = 0') end else begin
 						vetsi(O2,jedna,q);
-						if q{O2=1} then O:=O1 
+						if q{O2=1} then begin O:=O1; writeln('O2 = 1') end
 						else begin
 							soucet:=nula;
 							print0(soucet);
 							pom:=convert1(O1);
 							writeln(pom);
 							for i:=1 to pom do begin
+								writeln('Scitam:');
+								print0(soucet);
+								print0(O2);
 								soucet:=f_soucet(soucet,O2);
 							end;
 							O:=soucet;
