@@ -44,11 +44,12 @@ begin
 end;
 
 function convert1(a:s_longint_32):longint;
-var res:longint;faktor,i:integer;
+var res,faktor:longint;i:integer;
 begin
 	faktor:=1;
 	res:=0;
-	for i:=n downto 1 do begin
+	if a.cislo[n]<>0 then writeln(CHYBA) else
+	for i:=(n-1) downto 1 do begin
 		res:=res+faktor*a.cislo[i];
 		faktor:=faktor*10;
 	end;
@@ -208,7 +209,7 @@ begin
 	O:=convert0(H);
 	while Pokracovat do begin
 		if Z='$' then begin {na vstupu cislo}
-			V:=V+1; Zas[V]:=O; {operand dame do zasobniku}
+			V:=V+1; if V<=100 then Zas[V]:=O else writeln(CHYBA);{operand dame do zasobniku}
 			Pokracovat:=Prvek(H,Z);
 			O:=convert0(H);{nastane?}
 		end
