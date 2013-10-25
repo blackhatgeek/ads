@@ -160,8 +160,6 @@ var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
 	Pokracovat,zapor:boolean;
-	soucet:longint32a;
-	O:longint32b;
 begin
 	ok:=true;
 	V:=0;
@@ -179,15 +177,8 @@ begin
 			H2:=Zas[V]; V:=V-1; {pravy operand ze zasobniku}
 			H1:=Zas[V]; {levy operand ze zasobniku}
 			case Z of
-				'+': begin
-					H:=H1+H2;
-					O.cislo:=f_soucet(convert0(h1),convert0(h2));	
-					O.znamenko:=true;
-				end;
-				'-': begin
-					H:=H1-H2;
-					O:=f_rozdil(convert0(H1),convert0(H2));
-				end;
+				'+': H:=H1+H2;
+				'-': H:=H1-H2;
 				'*': begin
 					H:=0;
 					if H2>H1 then begin
