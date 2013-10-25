@@ -19,8 +19,8 @@ const n=10;
 type 
 cislice=0..9;
 longint_32=array[1..n] of cislice;
-s_longint_32=record znamenko:boolean; cislo:longint_32; end;
-
+longint_32a=array[0..n] of cislice;{kontrola preteceni}
+longint_32b=record cislo:longint_32a; znamenko:boolean end;{rozdil}
 zaznam=record c:cislice; p:boolean end;
 
 var	povoleno,cislo:set of char;
@@ -29,72 +29,69 @@ var	povoleno,cislo:set of char;
 	dalsi:char;
 	souc_bez,souc_s,rozd_bez,rozd_s:array[cislice,cislice] of zaznam;
 	l,j,k:integer;
-	nula,jedna:s_longint_32;
+	nula,jedna:longint_32;
 
-function convert0(a:longint):s_longint_32;
-var res:s_longint_32; i:integer;
+function convert0(a:longint):longint_32;
+var res:longint_32; i:integer;
 begin
 	for i:=n downto 1 do begin
-		res.cislo[i]:=a mod 10;
+		res[i]:=a mod 10;
 		a:=a div 10;
 	end;
-	if a>=0 then res.znamenko:=true else res.znamenko:=false;
 	convert0:=res;
 end;
 
-function convert1(a:s_longint_32):longint;
+function convert1(a:longint_32):longint;
 var res:longint;faktor,i:integer;
 begin
 	faktor:=1;
 	res:=0;
 	for i:=n downto 1 do begin
-		res:=res+faktor*a.cislo[i];
+		res:=res+faktor*a[i];
 		faktor:=faktor*10;
 	end;
-	if not a.znamenko then res:=-res;
 	convert1:=res;
 end;
 
-function vetsi(a,b:s_longint_32;var eq:boolean):boolean;
+function convert3(a:longint_32a):longint_32;
+var res:longint_32; i:integer;
+begin
+	for i:=1 to n do res[i]:=a[i];
+	convert3:=res;
+end;
+
+function vetsi(a,b:longint_32;var eq:boolean):boolean;
 var i:integer; res:boolean;
 begin
 	i:=1; res:=true; eq:=true;
-	if (a.znamenko=false) and (b.znamenko=true) then res:=false
-	else if (a.znamenko=true) and (b.znamenko=false) then res:=true
-	else begin
-		while (i<=n) and (res) do begin
-			if a[i]<b[i] then res:=false;
-			if a[i]<>b[i] then eq:=false;
-			i:=i+1;
-		end;
-		if not a.znamenko then if res then res:=false else res:=true
+	while (i<=n) and (res) do begin
+		if a[i]<b[i] then res:=false;
+		if a[i]<>b[i] then eq:=false;
+		i:=i+1;
 	end;
 	vetsi:=res;
 end;
 
 
-function f_soucet(a,b:s_longint_32):s_longint_32;
-var stav:boolean; c:s_longint_32; i:integer;
+function f_soucet(a,b:longint_32):longint_32;
+var stav:boolean; c:longint_32; i:integer;
 begin
-	c.znamenko:=true;
-	if (a.znamenko=false) and (b.znamenko=true) then c:=f_rozdil(b,a)
-	else if (b.znamenko=false) and (a.znamenko=true) then c:=f_rozdil(a,b)
-	else  {a,b stejne} if a.znamenko=false then c.znamenko:=false;
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{na zacatku je stav bez prenosu}stav:=false;
 	for i:=n downto 0 do begin
+		{if stav then writeln('s prenosem') else writeln('bez prenosu');}
 		if stav=false then begin
-			c.cislo[i]:=souc_bez[a[i],b[i]].c;
+			c[i]:=souc_bez[a[i],b[i]].c;
 			stav:=souc_bez[a[i],b[i]].p;	
 		end else begin
-			c.cislo[i]:=souc_s[a[i],b[i]].c;
+			c[i]:=souc_s[a[i],b[i]].c;
 			stav:=souc_s[a[i],b[i]].p;
 		end;
 	end;
 	f_soucet:=c;
 end;
 
-function f_rozdil(a,b:s_longint_32;var znamenko:boolean):s_longint_32;
+function f_rozdil(a,b:longint_32;var znamenko:boolean):longint_32;
 var stav:boolean; c:longint_32; delka_a, delka_b,i:integer;pom:longint_32;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
@@ -170,7 +167,7 @@ var	Zas: array [1..Max] of longint_32; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
-	Pokracovat,zapor,p,q,r:boolean;
+	Pokracovat,zapor,p,q:boolean;
 	soucet,O,O2,O1:longint_32;
 	pom,i:integer;
 begin
@@ -222,14 +219,14 @@ begin
 						end
 					end
 				end;
-				'/': if O2<>nula then begin
+				'/': if H2<>0 then begin
 					vetsi(O1,nula,q);
 					vetsi(O2,nula,p);
 					if(((not q) and (p)) or ((not p) and (q))) then zapor:=true else zapor:=false;
 					H:=0;
 					{O2:=convert0(H2);}
 					{soucet:=convert0(H1);}soucet:=O1;
-					vetsi(f_rozdil(O1,O2,r),nula,p);
+					vetsi(f_rozdil(O1,O2),nula,p);
 					while(p) do begin
 						H:=H+1;
 						{H1:=H1-H2;}
@@ -251,6 +248,13 @@ begin
 		ok:=false;
 		writeln(CHYBA);
 	end else begin PostfixVyhodnoceni:=convert1(Zas[1]); end;
+end;
+
+procedure print1(a:longint_32a);
+var i:integer;
+begin
+	for i:=0 to n do write(a[i],' ');
+	writeln('');
 end;
 
 begin
