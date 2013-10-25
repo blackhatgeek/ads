@@ -234,23 +234,18 @@ begin
 					O:=f_rozdil(O1,O2);
 				end;
 				'*': begin{zde q je pomocna promenna, kterou pouzivame pri porovnani na rovnost}
-					writeln('Nasobim:');
 					O:=nula;
 					if vetsi(O2,O1,q) then begin
+						writeln('Prohazuji O2 a O1');
 						O:=O2;
 						O2:=O1;
 						O1:=O;
 						O:=nula;
 					end;{pricitam mensi cislo}
-					print0(O1); print0(O2);
 					vetsi(O2,nula,q);
-					if q{O2='nula'} then O:=nula else begin
+					if q{O2='nula'} then begin O:=nula; writeln('O2 = 0') end else begin
 						vetsi(O2,jedna,q);
-						jedna.znamenko:=false;
-						vetsi(O2,jedna,p);
-						jedna.znamenko:=false;
-						if p{O2=-1} then begin O:=O1; O.znamenko:=false end 
-						else if q{O2=1} then O:=O1
+						if q{O2=1} then begin O:=O1; writeln('O2 = 1') end
 						else begin
 							soucet:=nula;
 							print0(soucet);
@@ -262,12 +257,9 @@ begin
 								print0(O2);
 								soucet:=f_soucet(soucet,O2);
 							end;
-							if O2.znamenko=O1.znamenko then soucet.znamenko:=true else soucet.znamenko:=false;
-							write (O1.znamenko,O2.znamenko,soucet.znamenko);
 							O:=soucet;
 						end
-					end;
-					print0(O);
+					end
 				end;
 				'/': begin
 					vetsi(O2,nula,q);
