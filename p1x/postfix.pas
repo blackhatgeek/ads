@@ -1,4 +1,3 @@
-{$R+}
 program postfix;
 {Evaluace postfixni notace}
 
@@ -129,16 +128,11 @@ begin
 		c:=nula;
 		{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i; c.znamenko:=false end 
 		else if delka_a=delka_b then begin 
-			c.znamenko:=true; i:=1; 
-			while (c.znamenko) and (i<=n) do
-				if a.cislo[i]<b.cislo[i] then begin
-					c:=b;
-					b:=a;
-					a:=c;
-					c:=nula;
-					c.znamenko:=false 
-				end else i:=i+1
+			c.znamenko:=true; i:=0; 
+			while (not c.znamenko) or (i<n) do
+				if a.cislo[i]<b.cislo[i] then c.znamenko:=false else i:=i+1;
 		end;
+		
 		{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 		{rozdil dvou stejne velkych cisel, vetsi - mensi}
 		{na zacatku je stav bez prenosu}stav:=false;
