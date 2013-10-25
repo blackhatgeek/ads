@@ -187,9 +187,9 @@ function PostfixVyhodnoceni(var ok:boolean):longint;
 const	Max = 100;{max pocet operandu ve vyrazu}
 var	Zas: array [1..Max] of s_longint_32; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
-	H:longint;{hodnoty operandu}
+	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
-	Pokracovat,p,q:boolean;
+	Pokracovat,zapor,p,q,r:boolean;
 	soucet,O,O2,O1:s_longint_32;
 	pom,i:integer;
 begin
@@ -338,10 +338,10 @@ begin
 		end;
 	end;
 	{NULA}
-	for l:=1 to n do nula.cislo[l]:=0;
+	for l:=1 to n do nula[l]:=0;
 	{JEDNA}
 	jedna:=nula;
-	jedna.cislo[n]:=1;
+	jedna[n]:=1;
 	
 
 dalsi:='*'; empty:=true;
