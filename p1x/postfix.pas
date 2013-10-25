@@ -59,23 +59,30 @@ begin
 	convert3:=res;
 end;
 
-function f_soucet(a,b:longint_32):longint_32;
+function f_soucet(a,b:longint_32):longint_32a;
 var aa,bb,cc:longint_32a; delka_a,delka_b:integer;pom:longint_32; stav:boolean;
-c:longint_32;
 begin
+	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
+	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
+	delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
+	{delsi z cisel} if delka_a<delka_b then begin pom:=a; a:=b; b:=pom; i:=delka_a;delka_a:=delka_b;delka_b:=i end;
+	{doplnime z leva jednou nulou} aa[0]:=0; for i:=1 to n do aa[i]:=a[i];
+	{kratsi z cisel doplnime z leva tolika nulami, aby byla stejne dlouha}
+	bb[0]:=0; for i:=1 to (delka_a-delka_b-1) do bb[i]:=0;
+	for i:=(delka_a-delka_b) to delka_b do bb[i]:=b[i];
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{na zacatku je stav bez prenosu}stav:=false;
 	for i:=n downto 0 do begin
 		{if stav then writeln('s prenosem') else writeln('bez prenosu');}
 		if stav=false then begin
-			c[i]:=souc_bez[a[i],b[i]].c;
-			stav:=souc_bez[a[i],b[i]].p;	
+			cc[i]:=souc_bez[aa[i],bb[i]].c;
+			stav:=souc_bez[aa[i],bb[i]].p;	
 		end else begin
-			c[i]:=souc_s[a[i],b[i]].c;
-			stav:=souc_s[a[i],b[i]].p;
+			cc[i]:=souc_s[aa[i],bb[i]].c;
+			stav:=souc_s[aa[i],bb[i]].p;
 		end;
 	end;
-	f_soucet:=c;
+	f_soucet:=cc;
 end;
 
 function f_rozdil(a,b:longint_32):longint_32b;
@@ -153,8 +160,8 @@ var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	H,H1,H2:longint;{hodnoty operandu}
 	Z:char;{znamenko na vstupu}
 	Pokracovat,zapor:boolean;
-	soucet:longint_32;
-	O:longint_32b;
+	soucet:longint32a;
+	O:longint32b;
 begin
 	ok:=true;
 	V:=0;
@@ -174,7 +181,8 @@ begin
 			case Z of
 				'+': begin
 					H:=H1+H2;
-					soucet:=f_soucet(convert0(h1),convert0(h2));
+					O.cislo:=f_soucet(convert0(h1),convert0(h2));	
+					O.znamenko:=true;
 				end;
 				'-': begin
 					H:=H1-H2;
