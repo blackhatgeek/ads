@@ -64,7 +64,6 @@ begin
 	if (a.znamenko=false) and (b.znamenko=true) then res:=false
 	else if (a.znamenko=true) and (b.znamenko=false) then res:=true
 	else begin
-		write('$');
 		while (i<=n) and (res) do begin
 			if a.cislo[i]<b.cislo[i] then res:=false;
 			if a.cislo[i]<>b.cislo[i] then eq:=false;
@@ -73,14 +72,6 @@ begin
 		if not a.znamenko then if res then res:=false else res:=true
 	end;
 	vetsi:=res;
-end;
-
-function kladne(a:s_longint_32; var nula:boolean):boolean;
-var i:integer;
-begin
-	nula:=true;
-	for i:=1 to n do if a.cislo[i]<>0 then nula:=false;
-	if not nula then kladne:=a.znamenko else kladne:=nula;
 end;
 
 procedure print0(a:s_longint_32);
@@ -252,7 +243,7 @@ begin
 						O:=nula;
 					end;{pricitam mensi cislo}
 					print0(O1); print0(O2);
-					kladne(O2,q);
+					vetsi(O2,nula,q);
 					if q{O2='nula'} then O:=nula else begin
 						vetsi(O2,jedna,q);
 						jedna.znamenko:=false;
