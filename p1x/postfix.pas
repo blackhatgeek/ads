@@ -28,11 +28,11 @@ var	povoleno,cislo:set of char;
 	ok2,empty:boolean;
 	dalsi:char;
 	souc_bez,souc_s,rozd_bez,rozd_s:array[cislice,cislice] of zaznam;
-	l,j,k:integer;
+	i,j,k:integer;
 	nula,jedna:longint_32;
 
 function convert0(a:longint):longint_32;
-var res:longint_32; i:integer;
+var res:longint_32;
 begin
 	for i:=n downto 1 do begin
 		res[i]:=a mod 10;
@@ -42,7 +42,7 @@ begin
 end;
 
 function convert1(a:longint_32):longint;
-var res:longint;faktor,i:integer;
+var res:longint;faktor:integer;
 begin
 	faktor:=1;
 	res:=0;
@@ -54,7 +54,7 @@ begin
 end;
 
 function convert3(a:longint_32a):longint_32;
-var res:longint_32; i:integer;
+var res:longint_32;
 begin
 	for i:=1 to n do res[i]:=a[i];
 	convert3:=res;
@@ -67,14 +67,13 @@ begin
 	while (i<=n) and (res) do begin
 		if a[i]<b[i] then res:=false;
 		if a[i]<>b[i] then eq:=false;
-		i:=i+1;
 	end;
 	vetsi:=res;
 end;
 
 
 function f_soucet(a,b:longint_32):longint_32;
-var stav:boolean; c:longint_32; i:integer;
+var stav:boolean; c:longint_32;
 begin
 	{postupujeme zprava a ke kazde dvojici vysledku urcime cislici vysledku z prislusneho pole dle stavu}
 	{na zacatku je stav bez prenosu}stav:=false;
@@ -92,7 +91,7 @@ begin
 end;
 
 function f_rozdil(a,b:longint_32;var znamenko:boolean):longint_32;
-var stav:boolean; c:longint_32; delka_a, delka_b,i:integer;pom:longint_32;
+var stav:boolean; c:longint_32; delka_a, delka_b:integer;pom:longint_32;
 begin
 	{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
 	delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
@@ -152,13 +151,6 @@ begin
 	end
 end;
 
-procedure print0(a:longint_32);
-var i:integer;
-begin
-	for i:=1 to n do write(a[i],' ');
-	writeln('');
-end;
-
 {vyhodnoceni aritmet. vyrazu zapsaneho v postfixu}
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
 function PostfixVyhodnoceni(var ok:boolean):longint;
@@ -169,7 +161,6 @@ var	Zas: array [1..Max] of longint_32; {pracovni zasobnik}
 	Z:char;{znamenko na vstupu}
 	Pokracovat,zapor,q:boolean;
 	soucet,O,O2,O1:longint_32;
-	pom,i:integer;
 begin
 	ok:=true;
 	V:=0;
@@ -215,16 +206,12 @@ begin
 					if q then O:=nula else begin
 						vetsi(O2,jedna,q);
 						if q then O:=O1 else begin
-							soucet:=nula;
-							print0(soucet);
+							soucet:=O1;
 							{O2:=convert0(H2);}
-							pom:=convert1(O1);
-							writeln(pom);
-							for i:=1 to pom do begin
+							for i:=1 to convert1(O1) do begin
 								{H:=H+H2;nasobeni je scitani}
 								soucet:=f_soucet(soucet,O2);
-							end;
-							O:=soucet;
+							end
 						end
 					end
 				end;
@@ -255,77 +242,82 @@ begin
 	end else begin PostfixVyhodnoceni:=convert1(Zas[1]); end;
 end;
 
-procedure print1(a:longint_32a);
-var i:integer;
+procedure print0(a:longint_32);
 begin
-	for i:=0 to n do write(a[i],' ');
+	for i:=1 to 10 do write(a[i],' ');
+	writeln('');
+end;
+
+procedure print1(a:longint_32a);
+begin
+	for i:=0 to 10 do write(a[i],' ');
 	writeln('');
 end;
 
 begin
 	{SCITANI}
 	{naplnim pole pro stav bez prenosu}
-	for l:=0 to 9 do begin {radek, y}
-		for j:=0 to (9-l) do begin{sloupec, x}
-			souc_bez[j,l].c:=abs(l+j);
-			souc_bez[j,l].p:=false;
+	for i:=0 to 9 do begin {radek, y}
+		for j:=0 to (9-i) do begin{sloupec, x}
+			souc_bez[j,i].c:=abs(i+j);
+			souc_bez[j,i].p:=false;
 		end;
-		for j:=(9-l+1) to 9 do begin
-			souc_bez[j,l].c:=abs(10-l-j);
-			souc_bez[j,l].p:=true;
+		for j:=(9-i+1) to 9 do begin
+			souc_bez[j,i].c:=abs(10-i-j);
+			souc_bez[j,i].p:=true;
 		end;
 	end;
 	{naplnim pole pro stav s prenosem}
 	for j:=0 to 9 do begin{sloupec,x}
-		for l:=0 to (8-j) do begin{radek,y}
-			souc_s[j,l].c:=abs(l+j+1);
-			souc_s[j,l].p:=false;
+		for i:=0 to (8-j) do begin{radek,y}
+			souc_s[j,i].c:=abs(i+j+1);
+			souc_s[j,i].p:=false;
 		end;
-		for l:=(9-j) to 9 do begin
-			souc_s[j,l].c:=abs(9-l-j);
-			souc_s[j,l].p:=true;
+		for i:=(9-j) to 9 do begin
+			souc_s[j,i].c:=abs(9-i-j);
+			souc_s[j,i].p:=true;
 		end;
 	end;
 	souc_s[9,9].c:=0;
 	
 	{ODCITANI}
 	{naplnim pole pro stav bez prenosu}
-	for l:=0 to 9 do begin{radek, mensitel}
+	for i:=0 to 9 do begin{radek, mensitel}
 		k:=0;
-		for j:=l to 9 do begin{sloupec, mensenec}
-			rozd_bez[j,l].c:=k;
-			rozd_bez[j,l].p:=false;
+		for j:=i to 9 do begin{sloupec, mensenec}
+			rozd_bez[j,i].c:=k;
+			rozd_bez[j,i].p:=false;
 			k:=k+1;
 		end;
-		for j:=0 to (l-1) do begin
-			rozd_bez[j,l].c:=k;
-			rozd_bez[j,l].p:=true;
+		for j:=0 to (i-1) do begin
+			rozd_bez[j,i].c:=k;
+			rozd_bez[j,i].p:=true;
 			k:=k+1;
 		end;
 	end;
 	{naplnim pole pro stav s prenosem}
 	rozd_s[0,0].c:=9;rozd_s[0,0].p:=false;
 	k:=0;
-	for l:=1 to 9 do begin
-		rozd_s[l,0].c:=k;
-		rozd_s[l,0].p:=false;
+	for i:=1 to 9 do begin
+		rozd_s[i,0].c:=k;
+		rozd_s[i,0].p:=false;
 		k:=k+1;
 	end;
-	for l:=1 to 9 do{mensitel}
-		for j:=0 to l do begin{mensenec}
-			rozd_s[j,l].c:=j+9-l;
-			rozd_s[j,l].p:=true;
+	for i:=1 to 9 do{mensitel}
+		for j:=0 to i do begin{mensenec}
+			rozd_s[j,i].c:=j+9-i;
+			rozd_s[j,i].p:=true;
 		end;
-	for l:=1 to 9 do begin{mensenec}
+	for i:=1 to 9 do begin{mensenec}
 		k:=0;
-		for j:=(l+1) to 9 do begin{mensitel}
-			rozd_s[j,l].c:=k;
-			rozd_s[j,l].p:=false;
+		for j:=(i+1) to 9 do begin{mensitel}
+			rozd_s[j,i].c:=k;
+			rozd_s[j,i].p:=false;
 			k:=k+1;
 		end;
 	end;
 	{NULA}
-	for l:=1 to n do nula[l]:=0;
+	for i:=1 to n do nula[i]:=0;
 	{JEDNA}
 	jedna:=nula;
 	jedna[n]:=1;
