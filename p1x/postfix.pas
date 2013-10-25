@@ -1,3 +1,4 @@
+{$R+}
 program postfix;
 {Evaluace postfixni notace}
 
@@ -58,7 +59,7 @@ end;
 {vyhodnoceni aritmet. vyrazu zapsaneho v postfixu}
 {vyuziva funkci Prvek pro vstup vyrazu po castech}
 function PostfixVyhodnoceni(var ok:boolean):longint;
-const	Max = 100;{max pocet operandu ve vyrazu}
+const	Max = MAXINT;{max pocet operandu ve vyrazu}
 var	Zas: array [1..Max] of longint; {pracovni zasobnik}
 	V: 0..Max;{vrchol zasobniku}
 	H,H1,H2:longint;{hodnoty operandu}
