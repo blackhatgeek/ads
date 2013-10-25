@@ -100,19 +100,13 @@ function f_rozdil(a,b:s_longint_32):s_longint_32;
 var stav:boolean; c:s_longint_32; delka_a, delka_b,i:integer;pom:s_longint_32;
 begin
 	if (a.znamenko=false)and (b.znamenko=false) then c:=f_soucet(a,b)
-	else if (a.znamenko=false) and (b.znamenko=true) {(-1) - (+1)} then begin
-		b.znamenko:=false; {(-1) + (-1)}
+	else if (a.znamenko=false) and (b.znamenko=true) {-1 - 1} then begin
+		b.znamenko:=false; {-1 + -1}
 		c:=f_soucet(a,b);
-	else if (a.znamenko=true) and (b.znamenko=false) then begin {(+1) - (-1)}
+	else if (a.znamenko=true) and (b.znamenko=false) then begin {1 - -1}
 		b.znamenko:=true;
 		c:=f_soucet(a,b);{1+1}
-	end else begin{(+1) - (+1)) nebo (-1) - (-1)}
-		if (a.znamenko=false) then begin
-			c:=b;
-			b:=a;
-			a:=c;
-			a.znamenko:=true;{(+1) - (+1), prohozeny mensenec a mensitel}
-		end;
+	end else begin
 		{ktere z cisel je delsi - najdu prvni nenulovou cislici a a prvni nenulovou cislici b}
 		delka_a:=0;i:=0;while a[i]<>0 do i:=i+1; delka_a:=n-i;
 		delka_b:=0;i:=0;while b[i]<>0 do i:=i+1; delka_b:=n-i;
