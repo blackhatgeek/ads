@@ -1,0 +1,13 @@
+Duplikáty (4/5)
+Program prohledávající disk a zkoumající, jestli nějaké dva soubory nemají tentýž obsah (a to nějakou lepší metodou než je porovnávání každého souboru s každým).
+
+na vstupu dostanu "vstupni adresar", ktery budu rekurzivne prochazet
+pro kazdy soubor si ulozim jeho adresu a velikost
+setridim databazi podle velikosti souboru v O(N log N)
+projdu databazi, pokud najdu nekolik souboru o stejne velikosti, spocitam kontrolni soucet kazdeho souboru a pokud bude stejny, prohlasim soubory za stejne
+
+nactu jmena, velikosti
+dostanu jmena, velikosti
+	setridim
+	najdu bloky
+	-> hash
