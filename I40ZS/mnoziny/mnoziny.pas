@@ -42,6 +42,8 @@ begin
 	c^.next:=d;
 	writeln('Seznam B:');
 	print(B);
+	writeln('Union destruct A,B');
+	print(unionDestruct(A,B));
 	writeln('Union A,B');
 	print(union(A,B));
 end.

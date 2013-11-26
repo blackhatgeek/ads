@@ -1,10 +1,23 @@
 Duplikáty (4/5)
-Program prohledávající disk a zkoumající, jestli nějaké dva soubory nemají tentýž obsah (a to nějakou lepší metodou než je porovnávání každého souboru s každým).
+Program prohledávající disk a zkoumající, jestli nějaké dva soubory nemají tentýž obsah 
+(a to nějakou lepší metodou než je porovnávání každého souboru s každým).
+Necht dva soubory jsou ruzne, maji-li ruzne kontrolni soucty nebo maji-li stejne kontrolni soucty a lisi se v alespon jednom bytu.
+Na vstupu dostanu adresar, ve kterem budu takove soubory hledat. Kontrolni soucty chci pocitat implementaci RIPEMD-160 (nebo SHA, 
+ale to je moc standardni)
+pro soubory se stejnym kontrolnim souctem budu zjistovat, zda jsou doopravdy stejne porovnanim jednotlivych bytu
 Implementace v C
 
-na vstupu dostanu "vstupni adresar", ktery budu rekurzivne prochazet
-a hledat soubory se stejnou velikosti a z nich ty se stejnym kontrolnim souctem
-dale pro soubory se stejnym kontrolnim souctem budu zjistovat, zda jsou doopravdy stejne
+Nelineární rovnice (6/6)
+Řešení nelineárních rovnic a jejich soustav, například nějakou šikovnou numerickou metodou.
+Reseni jedne rovnice metodami: puleni intervalu, secny, Newtonovou
+Reseni soustav (dvou) rovnic Newtonovou metodou
+Rovnice "hardcoded" (u Newtonovy metody vc. derivace), popr. moznost vyberu jedne z nekolika
+Uzivatel zada interval (oblast), ve kterem se predpoklada jediny koren.
+Implementace v C bez grafiky .
+extra: implementace v Matlabu (moznost zadavani fce jako retezce, graficke rozhrani, derivace analyticky)
+
+
+
 
 pro kazdy soubor si ulozim jeho adresu a velikost
 setridim databazi podle velikosti souboru v O(N log N)
