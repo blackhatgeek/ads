@@ -10,9 +10,14 @@ using System.Windows.Forms;
 namespace WindowsFormsApplication1
 {
     enum Stav { start, hra, jedna, dve, konec }
+    enum Chovani { OtevriZavri,Preklikavani, Schovej }
 
     public partial class Form1 : Form
     {
+        const int pridejKVysce = 30;
+        const int rozmerKarticky = 75;
+        Chovani chovani = Chovani.OtevriZavri;
+        int rozmer = 0;
         Stav stav = Stav.hra;
         int velikost = 6; int karticek;
         int tahy, uspech;
@@ -26,7 +31,6 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             tahy = 0; uspech = 0;
-            //VytvorTlacitka();
             UvodniObrazovka();
         }
 
@@ -75,10 +79,8 @@ namespace WindowsFormsApplication1
             statusStrip1.Show();
             menuStrip1.Show();
             this.panelTlacitek = new Panel();
-            panelTlacitek.Width = Width/10*9-10;
-            panelTlacitek.Height = Width/10*9-10;
-            //panelTlacitek.Width = Width - menuStrip1.Height - statusStrip1.Height;
-            //panelTlacitek.Height = Height - menuStrip1.Height - statusStrip1.Height;
+            panelTlacitek.Width = rozmer;
+            panelTlacitek.Height = rozmer;
             panelTlacitek.Parent = this;
             panelTlacitek.Left = 10;
             panelTlacitek.Top = menuStrip1.Height+10;
@@ -92,8 +94,8 @@ namespace WindowsFormsApplication1
                 for (int j = 0; j < velikost; j++)
                 {
                     Button b = new Button();
-                    b.Width = (panelTlacitek.Width) / velikost;
-                    b.Height = (panelTlacitek.Width) / velikost;
+                    b.Width = rozmerKarticky;
+                    b.Height = rozmerKarticky;
                     b.Left = i * b.Width;
                     b.Top = j * b.Height;
                     b.Text = otocena;
@@ -112,9 +114,6 @@ namespace WindowsFormsApplication1
             toolStripProgressBar1.Step = 1;
             Height += toolStripProgressBar1.Height+10;
             AktualizaceStavovehoRadku();
-            
-            //Width=Width+10;
-            //Height=Height+10;
         }
         void Zamichej()
         {
@@ -178,7 +177,7 @@ namespace WindowsFormsApplication1
             double uspesnost;
             if (tahy != 0)uspesnost = (Double)uspech / (Double)tahy*(Double)100;
             else uspesnost = 0.0;
-            toolStripStatusLabel1.Text = "Tahu: " + tahy + " Uspech:"+Math.Round(uspesnost)+"% Prubeh hry:";
+            toolStripStatusLabel1.Text = "Tahů: " + tahy + " Úspěch:"+Math.Round(uspesnost)+"% Průběh hry:";
             if (neodhaleneKarticky == 0) MessageBox.Show("Konec hry");
         }
         void Klik(object Sender,EventArgs e)
@@ -194,60 +193,72 @@ namespace WindowsFormsApplication1
                 case Stav.jedna://jedna karticka je otocena
                     if (!Sender.Equals(prvni))
                     {
-                        tahy++;
-                        druhe = Sender as Button;
-                        druhe.Text = druhe.Tag.ToString();
-                        if (prvni.Tag.Equals(druhe.Tag))
-                        {
-                            stav = Stav.hra;
-                            stejne = true;
-                            prvni.Enabled = false;
-                            druhe.Enabled = false;
-                            uspech++;
-                        }
-                        else
-                        {
-                            stav = Stav.dve;
-                            stejne = false;
-                        }
-                        AktualizaceStavovehoRadku();
+                        Vyhodnot(Sender as Button);
                     }
                     break;
                 case Stav.dve://dve karticky otocene
-                    //dve stejne otocene karticky - kliknutim na jednu se obe otoci
-                    //dve ruzne otocene karticky - kliknutim na druhou se druha otoci
-                    if (stejne & (((Button)Sender).Equals(prvni) || ((Button)Sender).Equals(druhe)))
+                    /*dve ruzne otocene karticky - kliknutim na druhou se druha otoci
+                     *podle Chovani:
+                     *Chovani.OtevriZavri - kliknutim na druhou se druha otoci, na klik na jinou karticku se nereaguje
+                     *Chovani.Preklikavani - kliknutim na druhou se druha otoci, kliknutim na jinou karticku se otoci druha a kliknuta
+                     *Chovani.Schovej - kliknutim na libovolnou karticku se prvni a druha otoci, popr. jeste otoci nova
+                     */
+                    if ((chovani.Equals(Chovani.OtevriZavri)|chovani.Equals(Chovani.Preklikavani))&!stejne & ((Button)Sender).Equals(druhe))
+                    {
+                        druhe.Text = otocena;
+                        druhe = null;
+                        stav = Stav.jedna;
+                    }
+                    else if (chovani.Equals(Chovani.Preklikavani) & !((Button)Sender).Equals(druhe)&!((Button)Sender).Equals(prvni))
+                    {
+                        druhe.Text = otocena;
+                        Vyhodnot(Sender as Button);                    
+                    }
+                    else if (chovani.Equals(Chovani.Schovej))
                     {
                         prvni.Text = otocena;
                         druhe.Text = otocena;
                         prvni = null;
                         druhe = null;
                         stav = Stav.hra;
-                        
-                    }
-                    else if (!stejne & ((Button)Sender).Equals(druhe))
-                    {
-                        druhe.Text = otocena;
-                        druhe = null;
-                        stav = Stav.jedna;
                     }
                     break;
-                default: MessageBox.Show("Chyba");break;
             }
         }
+
+        void Vyhodnot(Button b2)
+        {
+            tahy++;
+            druhe = b2 as Button;
+            druhe.Text = druhe.Tag.ToString();
+            if (prvni.Tag.Equals(druhe.Tag))
+            {
+                stav = Stav.hra;
+                stejne = true;
+                prvni.Enabled = false;
+                druhe.Enabled = false;
+                uspech++;
+            }
+            else
+            {
+                stav = Stav.dve;
+                stejne = false;
+            }
+            AktualizaceStavovehoRadku();
+        }
+
         void Start(object Sender, EventArgs e)
         {
             stav = Stav.hra;
             velikost = (int)((Button)Sender).Tag;
 
-            int pridejKVysce = 20; int vel=0;
             switch(velikost){
-                case 4: vel = 300; break;
-                case 6: vel = 500; break;
-                case 8: vel = 700; break;
+                case 4: rozmer = 350; break;
+                case 6: rozmer = 500; break;
+                case 8: rozmer = 650; break;
             }
-            Width = vel;
-            Height = vel + pridejKVysce;
+            Width = rozmer;
+            Height = rozmer + pridejKVysce;
 
             v44.Dispose();
             v66.Dispose();
@@ -255,9 +266,17 @@ namespace WindowsFormsApplication1
             VytvorTlacitka();
         }
 
+        //Polozky horniho menu
         private void nováToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //nova hra:
+            for (int i = 0; i < 2*karticek; i++)
+            {
+                tlacitka[i].Dispose();
+            }
+            panelTlacitek.Dispose();
+            tahy = 0; uspech = 0;
+            UvodniObrazovka();
         }
 
         private void konecToolStripMenuItem_Click(object sender, EventArgs e)
@@ -268,16 +287,19 @@ namespace WindowsFormsApplication1
         private void kartičkyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //chovani karticek - otevri a zavri (default)
+            chovani = Chovani.OtevriZavri;
         }
 
         private void překlikáváníToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             //chovani karticek - preklikavani
+            chovani = Chovani.Preklikavani;
         }
 
         private void schovejVšeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             //chovani karticek - schovej vse
+            chovani = Chovani.Schovej;
         }
 
         private void oProgramuToolStripMenuItem_Click(object sender, EventArgs e)
