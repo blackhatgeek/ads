@@ -14,3 +14,4 @@ C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Debug\WindowsF
 C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
 C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Help.resources

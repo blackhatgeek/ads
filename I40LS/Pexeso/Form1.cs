@@ -179,7 +179,17 @@ namespace WindowsFormsApplication1
             if (tahy != 0)uspesnost = (Double)uspech / (Double)tahy*(Double)100;
             else uspesnost = 0.0;
             toolStripStatusLabel1.Text = "Tahů: " + tahy + " Úspěch:"+Math.Round(uspesnost)+"% Průběh hry:";
-            if (neodhaleneKarticky == 0) Konec();
+            if (neodhaleneKarticky == 0)
+            {
+                for (int i = 0; i < karticek*2; i++)
+                {
+                    tlacitka[i].Dispose();
+                }
+                panelTlacitek.Dispose();
+                statusStrip1.Hide();
+                menuStrip1.Hide();
+                Konec();
+            }
         }
         void Klik(object Sender,EventArgs e)
         {
@@ -270,7 +280,7 @@ namespace WindowsFormsApplication1
         void Konec()
         {
             text = new Label();
-            text.Text = "Dohral jste hru na "+toolStripProgressBar1.Value/velikost/velikost*2+" % za "+tahy+" tahu\nVase uspesnost byla "+uspesnost+"%";
+            text.Text = "Dohral jste hru na "+toolStripProgressBar1.Value/toolStripProgressBar1.Maximum*100+" % za "+tahy+" tahu\nVase uspesnost byla "+uspesnost+"%";
             text.Parent = this;
             text.Top = 0;
             text.Left = 0;
@@ -351,6 +361,9 @@ namespace WindowsFormsApplication1
         private void oProgramuToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //napoveda - o programu
+            Help about = new Help();
+            about.ShowDialog();
+            about.Dispose();
         }
     }
 }
