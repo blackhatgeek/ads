@@ -10,3 +10,5 @@ eukleides.pas	eukleiduv algoritmus - nalezeni NSD dvou prirozenych cisel
 p1x/		priklady na pokrocile cviceni z Programovani I 2013/2014
 
 I40ZS/		priklady na standardni cviceni z Programovani I 2013/2014
+
+I40LS/		priklady na standardni cviceni z Programovani II 2013/2014

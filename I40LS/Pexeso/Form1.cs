@@ -16,7 +16,7 @@ namespace WindowsFormsApplication1
         Stav stav = Stav.hra;
         int velikost = 6; int karticek;
         int tahy, uspech;
-        Button prvni, druhe;
+        Button prvni, druhe,v44,v66,v88;
         Button[] tlacitka=null;
         Panel panelTlacitek;
         const string otocena = "PEXESO";
@@ -26,10 +26,52 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             tahy = 0; uspech = 0;
-            VytvorTlacitka();
+            //VytvorTlacitka();
+            UvodniObrazovka();
+        }
+
+        void UvodniObrazovka()
+        {
+            stav = Stav.start;
+            statusStrip1.Hide();
+            v44 = new Button();
+            v66 = new Button();
+            v88 = new Button();
+
+            int bW = Width / 4;
+            int bH = Height / 4;
+            int k = bH / 8;
+
+            v44.Width = bW;
+            v44.Height = bH;
+            v44.Top = k;
+            v44.Left = (Width-v44.Width)/2;
+            v44.Tag = 4;
+            v44.Parent = this;
+            v44.Text = "4 x 4";
+            v44.Click += new EventHandler(Start);
+
+            v66.Width = bW;
+            v66.Height = bH;
+            v66.Top = v44.Top + v44.Height + k;
+            v66.Left = v44.Left;
+            v66.Tag = 6;
+            v66.Parent = this;
+            v66.Text = "6 x 6";
+            v66.Click += new EventHandler(Start);
+
+            v88.Width = bW;
+            v88.Height = bH;
+            v88.Top = v66.Top + v66.Height + k;
+            v88.Left = v44.Left;
+            v88.Tag = 8;
+            v88.Parent = this;
+            v88.Text = "8 x 8";
+            v88.Click += new EventHandler(Start);
         }
 
         void VytvorTlacitka() {
+            statusStrip1.Show();
             this.panelTlacitek = new Panel();
             panelTlacitek.Width = Width/10*9-10;
             panelTlacitek.Height = Height/10*9-10;
@@ -138,13 +180,13 @@ namespace WindowsFormsApplication1
         {
             switch (stav)
             {
-                case Stav.hra:
+                case Stav.hra://vsechny karticky maji skryte hodnoty nebo nejsou enabled
                     stav = Stav.jedna;
                     prvni = Sender as Button;
                     prvni.Text = prvni.Tag.ToString();
                     AktualizaceStavovehoRadku();
                     break;
-                case Stav.jedna:
+                case Stav.jedna://jedna karticka je otocena
                     if (!Sender.Equals(prvni))
                     {
                         tahy++;
@@ -166,7 +208,7 @@ namespace WindowsFormsApplication1
                         AktualizaceStavovehoRadku();
                     }
                     break;
-                case Stav.dve:
+                case Stav.dve://dve karticky otocene
                     //dve stejne otocene karticky - kliknutim na jednu se obe otoci
                     //dve ruzne otocene karticky - kliknutim na druhou se druha otoci
                     if (stejne & (((Button)Sender).Equals(prvni) || ((Button)Sender).Equals(druhe)))
@@ -187,6 +229,16 @@ namespace WindowsFormsApplication1
                     break;
                 default: MessageBox.Show("Chyba");break;
             }
+        }
+
+        void Start(object Sender, EventArgs e)
+        {
+            stav = Stav.hra;
+            velikost = (int)((Button)Sender).Tag;
+            v44.Dispose();
+            v66.Dispose();
+            v88.Dispose();
+            VytvorTlacitka();
         }
     }
 }
