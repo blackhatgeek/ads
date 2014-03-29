@@ -91,6 +91,7 @@
             // nováToolStripMenuItem
             // 
             this.nováToolStripMenuItem.Name = "nováToolStripMenuItem";
+            this.nováToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.nováToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.nováToolStripMenuItem.Text = "Nová";
             this.nováToolStripMenuItem.Click += new System.EventHandler(this.nováToolStripMenuItem_Click);
@@ -98,6 +99,7 @@
             // konecToolStripMenuItem
             // 
             this.konecToolStripMenuItem.Name = "konecToolStripMenuItem";
+            this.konecToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.konecToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.konecToolStripMenuItem.Text = "Konec";
             this.konecToolStripMenuItem.Click += new System.EventHandler(this.konecToolStripMenuItem_Click);
@@ -115,21 +117,24 @@
             // kartičkyToolStripMenuItem
             // 
             this.kartičkyToolStripMenuItem.Name = "kartičkyToolStripMenuItem";
-            this.kartičkyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.kartičkyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            this.kartičkyToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.kartičkyToolStripMenuItem.Text = "Otevři a zavři";
             this.kartičkyToolStripMenuItem.Click += new System.EventHandler(this.kartičkyToolStripMenuItem_Click);
             // 
             // překlikáváníToolStripMenuItem1
             // 
             this.překlikáváníToolStripMenuItem1.Name = "překlikáváníToolStripMenuItem1";
-            this.překlikáváníToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.překlikáváníToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+            this.překlikáváníToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.překlikáváníToolStripMenuItem1.Text = "Překlikávání";
             this.překlikáváníToolStripMenuItem1.Click += new System.EventHandler(this.překlikáváníToolStripMenuItem1_Click);
             // 
             // schovejVšeToolStripMenuItem1
             // 
             this.schovejVšeToolStripMenuItem1.Name = "schovejVšeToolStripMenuItem1";
-            this.schovejVšeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.schovejVšeToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+            this.schovejVšeToolStripMenuItem1.Size = new System.Drawing.Size(177, 22);
             this.schovejVšeToolStripMenuItem1.Text = "Schovej vše";
             this.schovejVšeToolStripMenuItem1.Click += new System.EventHandler(this.schovejVšeToolStripMenuItem1_Click);
             // 
@@ -144,6 +149,7 @@
             // oProgramuToolStripMenuItem
             // 
             this.oProgramuToolStripMenuItem.Name = "oProgramuToolStripMenuItem";
+            this.oProgramuToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.oProgramuToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.oProgramuToolStripMenuItem.Text = "O programu";
             this.oProgramuToolStripMenuItem.Click += new System.EventHandler(this.oProgramuToolStripMenuItem_Click);

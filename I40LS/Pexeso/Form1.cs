@@ -21,7 +21,9 @@ namespace WindowsFormsApplication1
         Stav stav = Stav.hra;
         int velikost = 6; int karticek;
         int tahy, uspech;
-        Button prvni, druhe,v44,v66,v88;
+        double uspesnost;
+        Button prvni, druhe,v44,v66,v88,konec,nova;
+        Label text;
         Button[] tlacitka=null;
         Panel panelTlacitek;
         const string otocena = "PEXESO";
@@ -173,12 +175,11 @@ namespace WindowsFormsApplication1
         void AktualizaceStavovehoRadku()
         {
             int neodhaleneKarticky=karticek-uspech;
-            toolStripProgressBar1.Value=uspech;
-            double uspesnost;
+            toolStripProgressBar1.Value=uspech;         
             if (tahy != 0)uspesnost = (Double)uspech / (Double)tahy*(Double)100;
             else uspesnost = 0.0;
             toolStripStatusLabel1.Text = "Tahů: " + tahy + " Úspěch:"+Math.Round(uspesnost)+"% Průběh hry:";
-            if (neodhaleneKarticky == 0) MessageBox.Show("Konec hry");
+            if (neodhaleneKarticky == 0) Konec();
         }
         void Klik(object Sender,EventArgs e)
         {
@@ -266,6 +267,43 @@ namespace WindowsFormsApplication1
             VytvorTlacitka();
         }
 
+        void Konec()
+        {
+            text = new Label();
+            text.Text = "Dohral jste hru na "+toolStripProgressBar1.Value/velikost/velikost*2+" % za "+tahy+" tahu\nVase uspesnost byla "+uspesnost+"%";
+            text.Parent = this;
+            text.Top = 0;
+            text.Left = 0;
+            text.AutoSize = true;
+
+            konec = new Button();
+            konec.Text = "Konec";
+            konec.Parent = this;
+            konec.Top = 50;
+            konec.Left = 0;
+            konec.Click += new EventHandler(Vypinac);
+
+            nova = new Button();
+            nova.Text = "Nova hra";
+            nova.Parent = this;
+            nova.Top = 50;
+            nova.Left = 100;
+            nova.Click += new EventHandler(NovaHra);
+        }
+
+        void Vypinac(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+        void NovaHra(object sender, EventArgs e)
+        {
+            text.Dispose();
+            konec.Dispose();
+            nova.Dispose();
+            tahy = 0; uspech = 0;
+            UvodniObrazovka();
+        }
+
         //Polozky horniho menu
         private void nováToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -282,6 +320,14 @@ namespace WindowsFormsApplication1
         private void konecToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //konec hry:
+            for (int i = 0; i < 2 * karticek; i++)
+            {
+                tlacitka[i].Dispose();
+            }
+            panelTlacitek.Dispose();
+            menuStrip1.Hide();
+            statusStrip1.Hide();
+            Konec();
         }
 
         private void kartičkyToolStripMenuItem_Click(object sender, EventArgs e)
