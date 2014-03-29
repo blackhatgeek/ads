@@ -34,6 +34,8 @@ namespace WindowsFormsApplication1
         {
             stav = Stav.start;
             statusStrip1.Hide();
+            menuStrip1.Hide();
+
             v44 = new Button();
             v66 = new Button();
             v88 = new Button();
@@ -69,15 +71,17 @@ namespace WindowsFormsApplication1
             v88.Text = "8 x 8";
             v88.Click += new EventHandler(Start);
         }
-
         void VytvorTlacitka() {
             statusStrip1.Show();
+            menuStrip1.Show();
             this.panelTlacitek = new Panel();
             panelTlacitek.Width = Width/10*9-10;
-            panelTlacitek.Height = Height/10*9-10;
+            panelTlacitek.Height = Width/10*9-10;
+            //panelTlacitek.Width = Width - menuStrip1.Height - statusStrip1.Height;
+            //panelTlacitek.Height = Height - menuStrip1.Height - statusStrip1.Height;
             panelTlacitek.Parent = this;
             panelTlacitek.Left = 10;
-            panelTlacitek.Top = 10;
+            panelTlacitek.Top = menuStrip1.Height+10;
 
             karticek=velikost*velikost/2;
             tlacitka = new Button[2*karticek];
@@ -105,6 +109,7 @@ namespace WindowsFormsApplication1
             Zamichej();
             toolStripProgressBar1.Minimum = 0;
             toolStripProgressBar1.Maximum = velikost * velikost / 2;
+            toolStripProgressBar1.Step = 1;
             Height += toolStripProgressBar1.Height+10;
             AktualizaceStavovehoRadku();
             
@@ -230,15 +235,54 @@ namespace WindowsFormsApplication1
                 default: MessageBox.Show("Chyba");break;
             }
         }
-
         void Start(object Sender, EventArgs e)
         {
             stav = Stav.hra;
             velikost = (int)((Button)Sender).Tag;
+
+            int pridejKVysce = 20; int vel=0;
+            switch(velikost){
+                case 4: vel = 300; break;
+                case 6: vel = 500; break;
+                case 8: vel = 700; break;
+            }
+            Width = vel;
+            Height = vel + pridejKVysce;
+
             v44.Dispose();
             v66.Dispose();
             v88.Dispose();
             VytvorTlacitka();
+        }
+
+        private void nováToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //nova hra:
+        }
+
+        private void konecToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //konec hry:
+        }
+
+        private void kartičkyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //chovani karticek - otevri a zavri (default)
+        }
+
+        private void překlikáváníToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //chovani karticek - preklikavani
+        }
+
+        private void schovejVšeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //chovani karticek - schovej vse
+        }
+
+        private void oProgramuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //napoveda - o programu
         }
     }
 }
