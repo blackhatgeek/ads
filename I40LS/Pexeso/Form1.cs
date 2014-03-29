@@ -280,7 +280,8 @@ namespace WindowsFormsApplication1
         void Konec()
         {
             text = new Label();
-            text.Text = "Dohral jste hru na "+toolStripProgressBar1.Value/toolStripProgressBar1.Maximum*100+" % za "+tahy+" tahu\nVase uspesnost byla "+uspesnost+"%";
+            double prubeh = (double)toolStripProgressBar1.Value / (double)toolStripProgressBar1.Maximum * 100.0;
+            text.Text = "Dohral jste hru na "+prubeh+" % za "+tahy+" tahu\nVase uspesnost byla "+uspesnost+"%";
             text.Parent = this;
             text.Top = 0;
             text.Left = 0;
