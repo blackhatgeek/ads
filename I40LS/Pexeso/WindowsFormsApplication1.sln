@@ -14,6 +14,10 @@ Global
 		{3985A9AC-5521-4CAE-AF56-598E7EE16D24}.Release|x86.ActiveCfg = Release|x86
 		{3985A9AC-5521-4CAE-AF56-598E7EE16D24}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = WindowsFormsApplication1.csproj
+		outputpath = bin
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

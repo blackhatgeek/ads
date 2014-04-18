@@ -1,8 +1,0 @@
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\bin\Release\Pexeso.exe
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\bin\Release\Pexeso.pdb
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Form1.resources
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Help.resources
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.Properties.Resources.resources
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\WindowsFormsApplication1.csproj.GenerateResource.Cache
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\Pexeso.exe
-C:\Users\student\Documents\I40ZS\WindowsFormsApplication1\obj\x86\Release\Pexeso.pdb

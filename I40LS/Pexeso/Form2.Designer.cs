@@ -34,7 +34,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -63,7 +62,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.textBox2);
+            //this.tabPage2.Controls.Add(this.textBox2);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -91,7 +90,13 @@
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(243, 214);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Hráč kliká myší na tlačítka .......\r\natd atp.";
+			this.textBox1.Text = "Hráč kliká myší na tlačítka, po kliknutí se text změní na číslo.\n"+
+				"Cílem hráče je odhalit dvojice kartiček se stejným číslem na co nejmenší počet tahů.\n"+
+					"Hráč má možnost modifikovat chování kartiček. K dispozici má tři módy:\n"+
+					"V módu \"Otevři a zavři\" po otevření dvou různých kartiček je potřeba kliknout na druhou kartičku pro možnost zkusit jinou.\n"+
+					"V módu \"Překlikávání\" je možné po otevření dvou různých kartiček rovnou kliknout na další kartičku.\n"+
+					"V módu \"Schovej vše\" se kliknutím na libovolnou kartičku obě dvě otevřené kartičky zavřou.\n"+
+					"Po odhalení všech dvojic se hráči zobrazí jeho úspěšnost.";
             // 
             // label1
             // 
@@ -100,20 +105,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(239, 65);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Pexeso Copyright (C) 2014 Alexander Mansurov\r\n\r\nThis program comes with ABSOLUTEL" +
-    "Y NO \r\nWARRANTY This is free software and you are \r\nwelcome to redistribute it u" +
-    "nder certain conditions";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(9, 99);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(240, 123);
-            this.textBox2.TabIndex = 1;
-            this.textBox2.Text = "Text GPL zde";
+            this.label1.Text = "Alexander Mansurov\ndomácí úloha Pexeso";
             // 
             // Help
             // 

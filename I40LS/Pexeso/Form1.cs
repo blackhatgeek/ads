@@ -231,7 +231,10 @@ namespace WindowsFormsApplication1
                         druhe.Text = otocena;
                         prvni = null;
                         druhe = null;
-                        stav = Stav.hra;
+                        stav = Stav.jedna;
+			prvni=(Button)Sender;
+			prvni.Text=prvni.Tag.ToString();
+			AktualizaceStavovehoRadku();
                     }
                     break;
             }
