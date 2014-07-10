@@ -1,0 +1,12 @@
+Vypocet n nad k modulo m
+
+Spousteni
+Program je konzolovy. Na vstupu se ocekavaji tri nezaporna cisla N, 
+K, M, pricemz N>=K. Program si vybere vhodnou metodu vypoctu a 
+vrati vysledek na vystup. O samotnem vypoctu podrobneji v n_nad_k.pdf
+
+Preklad pomoci `make`
+
+V souboru main.c je hlavni program, ktey komunikuje s uzivatelem a vola
+patricne metody vypoctu. V souboru libcomb.c jsou ulozeny dalsi funkce.
+
